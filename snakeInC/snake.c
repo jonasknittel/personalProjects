@@ -41,17 +41,55 @@ int main(void) {
 
     SDL_RenderFillRect(renderer, &r);
     SDL_RenderPresent(renderer);
+    SDL_Delay(1000);
 
     // Set to 1 when window is closed
     int close_requested = 0;
+
+    // Speed
+    int x = 0;
+    int y = 0;
 
     // Game loop
     while (!close_requested) {
         // Handle close request
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                close_requested = 1;
+
+            // Event handler
+            switch (event.type) {
+            case SDL_QUIT: 
+                close_requested = 1; 
+                break;
+            case SDL_KEYDOWN:
+                // Speed and direction
+                switch (event.key.keysym.scancode) {
+                    case SDL_SCANCODE_UP:
+                    case SDL_SCANCODE_W:
+                        // Set speed
+                        y = -30;
+                        x = 0;
+                        break;
+                    case SDL_SCANCODE_DOWN:
+                    case SDL_SCANCODE_S:
+                        // Set speed
+                        y = 30;
+                        x= 0;
+                        break;
+                    case SDL_SCANCODE_LEFT:
+                    case SDL_SCANCODE_A:
+                        // Set speed
+                        y = 0;
+                        x = -30;
+                        break;
+                    case SDL_SCANCODE_RIGHT:
+                    case SDL_SCANCODE_D:
+                        // Set speed
+                        y = 0;
+                        x = 30;
+                        break;
+                }
+                break;
             }
         }
 
@@ -61,7 +99,8 @@ int main(void) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         // New Position
-        r.y -= 30;
+        r.y += y;
+        r.x += x;
 
         SDL_RenderFillRect(renderer, &r);
         SDL_RenderPresent(renderer);
