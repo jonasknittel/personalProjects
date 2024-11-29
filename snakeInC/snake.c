@@ -42,14 +42,26 @@ int main(void) {
     SDL_RenderFillRect(renderer, &r);
     SDL_RenderPresent(renderer);
 
+    // Set to 1 when window is closed
+    int close_requested = 0;
+
     // Game loop
-    for (int i = 0; i < 5; i++) {
+    while (!close_requested) {
+        // Handle close request
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                close_requested = 1;
+            }
+        }
+
+        // Render stuff
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         // New Position
-        r.y += 30;
+        r.y -= 30;
 
         SDL_RenderFillRect(renderer, &r);
         SDL_RenderPresent(renderer);
